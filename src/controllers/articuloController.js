@@ -65,3 +65,36 @@ export const putArticulos = async (req, res) => {
         InternalError(res);
     }
 };
+//Eliminar articulo
+export const deleteArticulo = async (req, res) => {
+    try{
+        const client = createConectionPG();
+        const {id} = req.params;
+        try {
+            await client.connect();
+            const articuloId = await client.query(querys.getCategoriasId, [id]);
+            if(articuloId.rows.length > 0){
+                await client.query(querys.deleteArticulos,[id]);
+                client.end();
+                return SuccessResponse(res, "Success", true, {  message: 'Articulo eliminado correctamente' } );
+            }else{
+                client.end();
+                return SuccessResponse(res, "Success", false, {  message: 'No existe un articulo con ese id' } );
+            }
+
+        } catch (error) {
+            if (error.code === errorsPG.alreadyExists) {
+                return SuccessResponse(res, "Ya se encuentra registrado", false);
+            }
+            if (error.code === errorsPG.syntaxError) {
+                return BadRequestError(res, "Sintaxis de entrada no válida");
+            }
+            Logger.error(colors.red("Error deleteEconomicResponsible "), error);
+            InternalError(res);
+        }
+
+    } catch (error) {
+        Logger.error(colors.red("Error al conectar a PG postgress "), error);
+        InternalError(res);
+    }
+};
