@@ -8,5 +8,6 @@ const articuloController = require("../../../../../controllers/articuloControlle
 export default function () {
     router.get("/getArticulos", params(), articuloController.getArticulos);
     router.post("/addArticulos/", validator(schema.postArticulos), articuloController.postArticulos);
+    router.put("/editArticulos/", validator(schema.putArticulos), articuloController.putArticulos);
     return router;
 }
