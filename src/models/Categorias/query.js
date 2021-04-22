@@ -7,3 +7,5 @@ VALUES ($1)`;
 export const editCategoria = `UPDATE categorias SET nombre_categoria=$1 WHERE id=$2`;
 //Consulta para eliminar categoria
 export const deleteCategoria = "DELETE FROM categorias WHERE id=$1";
+//Consultar categorias por id
+export const getCategoriasId = `SELECT * FROM categorias WHERE id=$1`;

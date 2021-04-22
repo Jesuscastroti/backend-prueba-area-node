@@ -39,3 +39,27 @@ export const postCategorias = async (req, res) => {
         InternalError(res);
     }
 };
+//Actualizar las categorias
+export const putCategorias = async (req, res) => {
+    const client = createConectionPG();
+    const {id,nombreCategoria} = req.body;
+    try {
+        await client.connect();
+        const verificarcategoria = await client.query(querys.getCategoriasId,[id])
+        if(verificarcategoria.rows.length > 0){
+            const categorias = await client.query(querys.editCategoria,[nombreCategoria,id]);
+            client.end();
+            return SuccessResponse(res, "Success", true, {  message: 'Categoria actualizada correctamente' } );
+        }else{
+            client.end();
+            return SuccessResponse(res, "Success", false, {  message: 'No existe una categoria con ese id' } );
+        }
+        
+    } catch (error) {
+        if (error.code === errorsPG.syntaxError) {
+            return BadRequestError(res, "Sintaxis de entrada no válida");
+        }
+        Logger.error(colors.red("Error putCategorias "), error);
+        InternalError(res);
+    }
+};

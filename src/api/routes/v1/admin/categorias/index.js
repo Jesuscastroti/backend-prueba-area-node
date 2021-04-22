@@ -9,5 +9,6 @@ const router = Router();
 export default function () {
     router.get("/getCategorias/", params(), CategoriaController.getCategorias);
     router.post("/addCategorias/", validator(schema.postCategoria), CategoriaController.postCategorias);
+    router.put("/editCategorias/", validator(schema.putCategoria), CategoriaController.putCategorias);
     return router;
 };
