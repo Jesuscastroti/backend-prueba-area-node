@@ -22,3 +22,20 @@ export const getCategorias = async (req, res) => {
     }
 };
 
+//Agregar las categorias
+export const postCategorias = async (req, res) => {
+    const client = createConectionPG();
+    const {nombreCategoria} = req.body;
+    try {
+        await client.connect();
+        const categorias = await client.query(querys.addCategoria,[nombreCategoria]);
+        client.end();
+        return SuccessResponse(res, "Success", true, {  message: 'Categoria agregada correctamente' } );
+    } catch (error) {
+        if (error.code === errorsPG.syntaxError) {
+            return BadRequestError(res, "Sintaxis de entrada no válida");
+        }
+        Logger.error(colors.red("Error postCategorias "), error);
+        InternalError(res);
+    }
+};
