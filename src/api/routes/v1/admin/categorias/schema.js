@@ -8,5 +8,8 @@ export default {
         nombreCategoria: Joi.string().required(),
         id: Joi.string().required(),
     }),
+    deleteCategoria: Joi.object().keys({
+        id: Joi.string().required()
+    }),
 };
 
