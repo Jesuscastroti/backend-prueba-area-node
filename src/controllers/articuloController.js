@@ -22,3 +22,22 @@ export const getArticulos = async(req,res) =>{
     }
     
 };
+
+
+//Agregar los articulos
+export const postArticulos= async (req, res) => {
+    const client = createConectionPG();
+    const {numeroRegistro, nombre, descripcion} = req.body;
+    try {
+        await client.connect();
+        const articulos = await client.query(querys.addArticulos,[numeroRegistro, nombre, descripcion]);
+        client.end();
+        return SuccessResponse(res, "Success", true, {  message: 'Articulo agregado correctamente' } );
+    } catch (error) {
+        if (error.code === errorsPG.syntaxError) {
+            return BadRequestError(res, "Sintaxis de entrada no válida");
+        }
+        Logger.error(colors.red("Error postArticulos "), error);
+        InternalError(res);
+    }
+};
