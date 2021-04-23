@@ -6,7 +6,9 @@ import { name, port } from "./config";
 async function startServer () {
     const app = express();
     await require("./loaders").default(app);
-
+    app.get("/", function (req, res) {
+        res.send("<h1>¡Bienvenido!,Api prueba area inmobiliaria corriendo</h1>");
+      });
     app.
         listen(port, () => {
             Logger.info(`${colors.yellow("########################################################")}
